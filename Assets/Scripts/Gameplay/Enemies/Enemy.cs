@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ using UnityEngine.UIElements;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public int GoldValue => _goldValue;
+    public int ScoreValue => _scoreValue;
     public Stat BaseSpeed => _baseSpeed;
     public Transform Goal 
     { 
@@ -20,9 +23,12 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public event Action OnGoalReach = () => { };
+
     [Header("Stats")]
+    [SerializeField] private int _goldValue;
+    [SerializeField] private int _scoreValue;
     [SerializeField] private Stat _baseSpeed;
-    [SerializeField] private Stat _goldValue;
 
     protected NavMeshAgent _agent;
     protected Transform _goal;
@@ -37,5 +43,10 @@ public abstract class Enemy : MonoBehaviour
     protected void Update()
     {
         _transform.LookAt(Goal.position);
+    }
+
+    public void CallOnGoalReach()
+    {
+        OnGoalReach();
     }
 }

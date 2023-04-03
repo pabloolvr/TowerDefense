@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _playerHealthField;
+    [SerializeField] private TextMeshProUGUI _playerGoldField;
+    [SerializeField] private TextMeshProUGUI _playerScoreField;
+
     private Camera _camera;
     private int _layerMask;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _camera = Camera.main;
         _layerMask = 1 << 6;
     }
 
-    void Update()
+    private void Update()
     {
+        /*
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -27,14 +33,22 @@ public class UIManager : MonoBehaviour
                 //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
                 Debug.Log($"Hit {hit.transform.name}");
             }
-
-            //Physics.rayc
-            //Raycast
-            //Debug.Log(mouseClickPosition);
-            //Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow);
-            //transform.position = _camera.ScreenToViewportPoint(Input.mousePosition);
-            //Instantiate(cube, mouseClickPosition, Quaternion.identity);
         }
+        */
+    }
+
+    public void UpdateGoldAmount(int amount)
+    {
+        _playerGoldField.text = "Gold: " + amount.ToString();
+    }
+
+    public void UpdateHealthAmount(int amount)
+    {
+        _playerHealthField.text = "Health: " + amount.ToString();
+    }
+
+    public void UpdateScore(int amount)
+    {
+        _playerScoreField.text = "Score: " + amount.ToString();
     }
 }

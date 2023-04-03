@@ -8,6 +8,7 @@ public class PlayerBase : MonoBehaviour
     {
         if (col.TryGetComponent(out Enemy enemy))
         {
+            enemy.CallOnGoalReach();
             col.gameObject.SetActive(false);
         }
     }

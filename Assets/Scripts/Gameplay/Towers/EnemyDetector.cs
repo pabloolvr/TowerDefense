@@ -7,8 +7,7 @@ public class EnemyDetector : MonoBehaviour
     public List<Enemy> DetectedEnemies => _detectedEnemies;
 
     [SerializeField] private List<Enemy> _detectedEnemies;
-
-  
+ 
     private void Start()
     {
         _detectedEnemies = new List<Enemy>();

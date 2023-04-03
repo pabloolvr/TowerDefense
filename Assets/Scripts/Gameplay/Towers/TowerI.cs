@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Tower I deals high damage to a single enemy at a time.
+/// </summary>
 public class TowerI : Tower
 {
     [SerializeField] private float _attacksPerSecond;
@@ -12,8 +15,9 @@ public class TowerI : Tower
         enemy.GetComponent<DamageableUnit>().Damage(_attackDamage);
     }
 
-    protected void Update()
+    protected override void Update()
     {
-        EffectApplication(1 / Mathf.Max(Mathf.Epsilon, _attacksPerSecond), false);
+        base.Update();
+        EffectApplicator(1 / Mathf.Max(Mathf.Epsilon, _attacksPerSecond), false);
     }
 }

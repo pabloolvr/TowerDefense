@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Tower T deals low damage to all enemies in area.
+/// </summary>
 public class TowerT : Tower
 {
     [SerializeField] private float _damagePerSecond;
@@ -13,6 +16,6 @@ public class TowerT : Tower
 
     protected void Update()
     {
-        EffectApplication(0, true);
+        EffectApplicator(0, true);
     }
 }
