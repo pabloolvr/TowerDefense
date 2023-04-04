@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TowerPlacer : MonoBehaviour
 {
+    public GameObject SelectedTower => _selectedTower;
+
     [SerializeField] private Transform _towerContainer;
 
     [SerializeField] private GameObject _towerI;

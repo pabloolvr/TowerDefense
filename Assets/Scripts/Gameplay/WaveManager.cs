@@ -22,7 +22,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private Transform _enemiesContainer;
 
     [Header("Wave Settings")]
-    [SerializeField] private float _firstWaveDelay;
     [SerializeField] private float _maxWavePeriod;
     [SerializeField] private int _waveGrowth;
 
@@ -30,6 +29,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float _maxLocalXPos;
     [SerializeField] private float _minLocalXPos;
     [SerializeField] private float _maxLocalZPos;
+    [SerializeField, Range(1f, 2f)] private float _xPosOffsetMultiplier = 1.2f;
     private float _avgLocalXPos;
     private float _maxLocalPosOffset;
 
@@ -38,7 +38,6 @@ public class WaveManager : MonoBehaviour
 
     private int _maxWaveSize;
     private List<Enemy> _enemyPool;
-    private List<Enemy> _spawnedEnemies;
     private float _lastWaveTime;
     private int _curWave;
 
@@ -46,7 +45,7 @@ public class WaveManager : MonoBehaviour
     {
         _lastWaveTime = float.MinValue;
         _avgLocalXPos = (_maxLocalXPos + _minLocalXPos) / 2;
-        _maxLocalPosOffset = _maxLocalXPos - _avgLocalXPos;
+        _maxLocalPosOffset = (_maxLocalXPos - _avgLocalXPos) / _xPosOffsetMultiplier;
         _curWave = 0;
         _maxWaveSize = 0;
         SortEnemies();
@@ -54,7 +53,6 @@ public class WaveManager : MonoBehaviour
 
     private void SortEnemies()
     {
-        _spawnedEnemies = new List<Enemy>();
         _enemyPool = new List<Enemy>();
 
         Dictionary<GameObject, int> map = new Dictionary<GameObject, int>();
@@ -62,7 +60,7 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < _enemiesData.Length; i++)
         {
             _maxWaveSize += _enemiesData[i].MaxQuantity;
-            map.Add(_enemiesData[i].EnemyPrefab, _enemiesData[i].MaxQuantity);
+            map.Add(_enemiesData[i].EnemyPrefab, _enemiesData[i].MaxQuantity * 3);
         }
 
         int sortedEnemies = 0;
@@ -71,20 +69,14 @@ public class WaveManager : MonoBehaviour
             int sortedAux = Random.Range(0, _enemiesData.Length);
             if (map[_enemiesData[sortedAux].EnemyPrefab] > 0)
             {
+                map[_enemiesData[sortedAux].EnemyPrefab]--;
                 GameObject prefab = _enemiesData[sortedAux].EnemyPrefab;
-                Enemy enemy = Instantiate(prefab/*, prefab.transform.position, prefab.transform.rotation*/, _enemiesContainer).GetComponent<Enemy>();
-                //enemy.transform.localPosition = prefab.transform.localPosition;
+                Enemy enemy = Instantiate(prefab, _enemiesContainer).GetComponent<Enemy>();
                 _enemyPool.Add(enemy);
                 sortedEnemies++;
             }
         }
 
-    }
-
-    private void Start()
-    {
-        //StartCoroutine(StartWaveManager());
-        //SpawnWave();
     }
 
     private void Update()
@@ -98,24 +90,22 @@ public class WaveManager : MonoBehaviour
     {
         _lastWaveTime = Time.fixedTime;       
 
-        int waveSize = (_curWave + 1) * _waveGrowth;
+        int waveSize = Math.Min(_maxWaveSize, (_curWave + 1) * _waveGrowth);
         int spawnedEnemies = 0;
         float curLocalPosOffset = 0;
   
-        for (int i = 0; i < _enemyPool.Count; i++)
+        foreach (Enemy enemy in _enemyPool)
         {
-            GameObject enemyObject = _enemyPool[i].gameObject;
-
-            if (!enemyObject.activeSelf)
+            if (!enemy.gameObject.activeSelf)
             {
-                _enemyPool[i].IncreaseStats(_curWave);
-                bool isEvenIteration = i % 2 == 0;
-                enemyObject.transform.localPosition = SetNewEnemyLocalPosition(enemyObject.transform.localPosition, curLocalPosOffset, isEvenIteration);
-                enemyObject.SetActive(true);
+                enemy.IncreaseStats(_curWave);
+                bool spawnedEvenEnemies = spawnedEnemies % 2 == 0;
+                enemy.transform.localPosition = SetNewEnemyLocalPosition(enemy.transform.localPosition, curLocalPosOffset, spawnedEvenEnemies);
+                enemy.gameObject.SetActive(true);
                 spawnedEnemies++;
 
-                // add 1 to localPosOffset whenever i is even
-                if (isEvenIteration)
+                // add 1 to localPosOffset whenever spawned enemies count is even
+                if (spawnedEvenEnemies)
                 {
                     curLocalPosOffset++;
                 }
@@ -132,9 +122,9 @@ public class WaveManager : MonoBehaviour
 
     private Vector3 SetNewEnemyLocalPosition(Vector3 curPos, float localPosOffset, bool positiveOffset)
     {
-        float multiplier = positiveOffset? 1 : -1;
+        float multiplier = positiveOffset? _xPosOffsetMultiplier : -_xPosOffsetMultiplier;
         float xPos = _avgLocalXPos + ((localPosOffset % _maxLocalPosOffset) * multiplier);
-        float zPos = _maxLocalZPos - Mathf.Floor(localPosOffset / _maxLocalPosOffset);
+        float zPos = _maxLocalZPos - (2 * Mathf.Floor(localPosOffset / _maxLocalPosOffset));
         return new Vector3(xPos, curPos.y, zPos);
     }
 }

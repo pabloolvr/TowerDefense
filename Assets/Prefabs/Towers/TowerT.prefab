@@ -134,11 +134,11 @@ MonoBehaviour:
   _towerBase: {fileID: 7295862249204073359}
   _name: Tower T
   _description: Deals low damage over time to all enemies in range.
-  _basePrice: 100
-  _baseUpgradeCost: 60
   _maxLevel: 0
+  _basePrice: 100
+  _priceGrowth: 100
+  _baseUpgradeCost: 60
   _upgradeCostGrowth: 1.5
-  _isMultiTarget: 1
   _damagePerSecond: 10
   _damagePerSecondGrowth: 0.1
 --- !u!114 &2425932422586957590

@@ -33,6 +33,7 @@ public abstract class Tower : MonoBehaviour
     public int Level => _level;
     public int MaxLevel => _maxLevel;
     public int BasePrice => _basePrice;
+    public int PriceGrowth => _priceGrowth;
     public string Name => _name;
     public string Description => _description;
     public int UpgradeCost => (int)(_baseUpgradeCost * Mathf.Max(1, _upgradeCostGrowth * (Level)));
@@ -45,11 +46,11 @@ public abstract class Tower : MonoBehaviour
     [Header("Stats")]
     [SerializeField] protected string _name;
     [SerializeField] protected string _description;
-    [SerializeField] protected int _basePrice;
-    [SerializeField] protected int _baseUpgradeCost;
     [SerializeField] protected int _maxLevel;
+    [SerializeField] protected int _basePrice;
+    [SerializeField] protected int _priceGrowth;
+    [SerializeField] protected int _baseUpgradeCost;
     [SerializeField, Range(0f, 2f)] protected float _upgradeCostGrowth;
-    [SerializeField] protected bool _isMultiTarget;
 
     protected MeshRenderer _towerActionRange;
     protected SelectableObject _selectableComponent;
@@ -103,6 +104,11 @@ public abstract class Tower : MonoBehaviour
         {
             _level++;
         }
+    }
+
+    public int GetPrice(int growthSize)
+    {
+        return _basePrice + growthSize * _priceGrowth;
     }
 
     /// <summary>

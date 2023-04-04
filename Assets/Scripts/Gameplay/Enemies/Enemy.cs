@@ -24,9 +24,12 @@ public abstract class Enemy : MonoBehaviour
 
     protected void OnEnable()
     {
+        _agent.enabled = false;
+        _agent.enabled = true;
+
         if (Goal)
         {
-            _agent.destination = Goal.position;
+            _agent.SetDestination(Goal.position);
         }
     }
 
@@ -40,7 +43,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected Stat _baseSpeed;
 
     protected NavMeshAgent _agent;
-    [SerializeField] protected Transform _goal;
+    protected Transform _goal;
     protected Transform _transform;
 
     protected void Awake()
@@ -49,7 +52,7 @@ public abstract class Enemy : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _baseSpeed.OnAddModifier += SetEnemySpeed;
         _baseSpeed.OnRemoveModifier += SetEnemySpeed;
-        SetEnemySpeed();
+        SetEnemySpeed();      
     }
 
     protected void Update()
@@ -59,7 +62,10 @@ public abstract class Enemy : MonoBehaviour
 
     protected void SetEnemySpeed()
     {
-        _agent.speed = _baseSpeed.Value;
+        if (_agent.enabled)
+        {
+            _agent.speed = _baseSpeed.Value;
+        }
     }
 
     public void CallOnGoalReach()

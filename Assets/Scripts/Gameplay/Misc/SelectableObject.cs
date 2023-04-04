@@ -9,7 +9,6 @@ public class SelectableObject : MonoBehaviour
 
     [SerializeField] private Transform[] _outlineTransforms;
     [SerializeField] private Outline.Mode _outlineMode;
-    [SerializeField] private Color _outlineColor;
     [SerializeField, Range(0f, 10f)] private float _outlineWidth;
 
     private List<Outline> _outlines;
@@ -23,7 +22,6 @@ public class SelectableObject : MonoBehaviour
         {
             Outline outline = transform.gameObject.AddComponent<Outline>();
             outline.OutlineMode = _outlineMode;
-            //outline.OutlineColor = _outlineColor;
             outline.OutlineWidth = _outlineWidth;
             _outlines.Add(outline);
             outline.enabled = false;

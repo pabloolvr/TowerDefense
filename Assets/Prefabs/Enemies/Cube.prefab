@@ -351,9 +351,9 @@ NavMeshAgent:
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 0
+  m_AutoRepath: 0
   m_Height: 1.5
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
@@ -401,13 +401,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e2538cd0a5c1d44584a8cc78e0b6c40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _damageableComponent: {fileID: 8283947282111716152}
   _healthPointsGrowth: 1
   _goldValue: 10
   _scoreValue: 1
   _baseSpeed:
     _baseValue: 6
     _modifiers: []
-  _damageableComponent: {fileID: 8283947282111716152}
   _goal: {fileID: 0}
 --- !u!1 &8283947282144712025
 GameObject:

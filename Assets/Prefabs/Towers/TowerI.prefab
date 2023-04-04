@@ -468,11 +468,11 @@ MonoBehaviour:
   _towerBase: {fileID: 8386516035878098767}
   _name: Tower I
   _description: Deals high single-target damage at each hit.
-  _basePrice: 100
-  _baseUpgradeCost: 60
   _maxLevel: 0
+  _basePrice: 100
+  _priceGrowth: 100
+  _baseUpgradeCost: 60
   _upgradeCostGrowth: 1.5
-  _isMultiTarget: 0
   _attacksPerSecond: 1
   _attackDamage: 50
   _attackDamageGrowth: 1

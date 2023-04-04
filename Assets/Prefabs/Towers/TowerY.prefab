@@ -230,11 +230,11 @@ MonoBehaviour:
   _towerBase: {fileID: 6271397902486868226}
   _name: Tower Y
   _description: Slows all enemies in range.
-  _basePrice: 100
-  _baseUpgradeCost: 60
   _maxLevel: 0
+  _basePrice: 100
+  _priceGrowth: 100
+  _baseUpgradeCost: 60
   _upgradeCostGrowth: 1.5
-  _isMultiTarget: 1
   _slowPercent: 0.2
   _maxSlowPercent: 0.6
   _slowPercentGrowth: 0.01

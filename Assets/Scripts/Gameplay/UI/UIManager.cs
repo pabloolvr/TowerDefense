@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public ScrollRect TowerCardsScrollRect => _towerCardsScrollRect;
     public Button TowersButton => _towersButton;
     public TowerInfoPanel TowerInfoPanel => _towerInfoPanel;
+    public GameOverPanel GameOverPanel => _gameOverPanel;
 
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private TextMeshProUGUI _playerHealthField;
@@ -18,6 +19,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TowerInfoPanel _towerInfoPanel;
     [SerializeField] private ScrollRect _towerCardsScrollRect;
     [SerializeField] private Button _towersButton;
+    [SerializeField] private GameOverPanel _gameOverPanel;
+    [SerializeField] private Canvas[] _uiRegions;
 
     private UITowerCard[] _towerCards;
     private Camera _camera;
@@ -51,7 +54,7 @@ public class UIManager : MonoBehaviour
 
         if (Physics.Raycast(_mouseRay.origin, _mouseRay.direction, out _mouseHit, Mathf.Infinity, _towerLayerMask))
         {
-            Debug.DrawRay(_mouseRay.origin, _mouseRay.direction * 1000, Color.yellow);
+            //Debug.DrawRay(_mouseRay.origin, _mouseRay.direction * 1000, Color.yellow);
             if (_mouseHit.transform.parent.TryGetComponent(out SelectableObject selectableObject))
             {
                 if (_curSelectableObject == null)
@@ -100,7 +103,7 @@ public class UIManager : MonoBehaviour
 
         foreach (var towerCard in _towerCards)
         {
-            towerCard.Initialize(_gameManager.TowerPlacer, this);
+            towerCard.Initialize(this);
         }
     }
 
@@ -124,5 +127,13 @@ public class UIManager : MonoBehaviour
     public void UpdateScore(int amount)
     {
         _playerScoreField.text = "Score: " + amount.ToString();
+    }
+
+    public void SetRegionsActive(bool active)
+    {
+        foreach (Canvas region in _uiRegions)
+        {
+            region.enabled = active;
+        }
     }
 }

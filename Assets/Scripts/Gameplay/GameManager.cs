@@ -54,11 +54,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Time.timeScale = 0;
-    }
-
-    public void StartGame()
-    {
-        Time.timeScale = 1;
+        _UIManager.SetRegionsActive(false);
+        _UIManager.GameOverPanel.gameObject.SetActive(true);
     }
 }

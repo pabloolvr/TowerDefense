@@ -7,18 +7,17 @@ using UnityEngine.UI;
 public class UITowerCard : MonoBehaviour
 {
     public Button PlaceButton => _placeButton;
-    public int TotalTowerPrice => BaseTowerPrice + AdditionalTowerPrice;
-    public int BaseTowerPrice => _towerPrefab.GetComponent<Tower>().BasePrice + _additionalTowerPrice;
-    public int AdditionalTowerPrice
+    public int TotalTowerPrice => _towerPrefab.GetComponent<Tower>().GetPrice(PlacedTowersQty);
+    public int PlacedTowersQty
     {
         get
         {
-            return _additionalTowerPrice;
+            return _placedTowersQty;
         }
         private set
         {
-            _additionalTowerPrice = value;
-            _priceField.text = "Price: " + TotalTowerPrice.ToString();
+            _placedTowersQty = value;
+            _priceField.text = "Price: " + TotalTowerPrice;
         }
     }
 
@@ -28,24 +27,22 @@ public class UITowerCard : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _priceField;
     [SerializeField] private Button _placeButton;
 
-    private Tower _prefabTowerComponent;
     private TowerPlacer _towerPlacer;
     private UIManager _uiManager;
-    
-    private int _additionalTowerPrice;
+    private int _placedTowersQty;
 
     private void Awake()
     {
-        _prefabTowerComponent = _towerPrefab.GetComponent<Tower>();
-        _nameField.text = _prefabTowerComponent.Name;
-        _descriptionField.text = _prefabTowerComponent.Description;
-        AdditionalTowerPrice = 0;
+        Tower prefabTowerComponent = _towerPrefab.GetComponent<Tower>();
+        _nameField.text = prefabTowerComponent.Name;
+        _descriptionField.text = prefabTowerComponent.Description;
+        PlacedTowersQty = 0;
     }
 
-    public void Initialize(TowerPlacer towerPlacer, UIManager uiManager)
+    public void Initialize(UIManager uiManager)
     {
-        _towerPlacer = towerPlacer;
         _uiManager = uiManager;
+        _towerPlacer = _uiManager.GameManager.TowerPlacer;
 
         _placeButton.onClick.AddListener(() => 
         { 
@@ -64,8 +61,10 @@ public class UITowerCard : MonoBehaviour
 
     private void BuyNewTower()
     {
+
         _uiManager.GameManager.PlayerManager.AddGoldAmount(-TotalTowerPrice);
-        _uiManager.UpdateGoldAmount(_uiManager.GameManager.PlayerManager.PlayerGold);
+        _uiManager.UpdateGoldAmount(_uiManager.GameManager.PlayerManager.PlayerGold);        
+        PlacedTowersQty++;
         ResetTowerPlacerListeners();
     }
 
