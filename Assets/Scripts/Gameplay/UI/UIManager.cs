@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     public Button TowersButton => _towersButton;
     public TowerInfoPanel TowerInfoPanel => _towerInfoPanel;
     public GameOverPanel GameOverPanel => _gameOverPanel;
+    public GameObject TowerPlacementControls => _towerPlacementControls;
 
     [SerializeField] private GameManager _gameManager;
     [SerializeField] private TextMeshProUGUI _playerHealthField;
@@ -19,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TowerInfoPanel _towerInfoPanel;
     [SerializeField] private ScrollRect _towerCardsScrollRect;
     [SerializeField] private Button _towersButton;
+    [SerializeField] private GameObject _towerPlacementControls;
     [SerializeField] private GameOverPanel _gameOverPanel;
     [SerializeField] private Canvas[] _uiRegions;
 

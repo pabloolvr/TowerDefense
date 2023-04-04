@@ -7,8 +7,8 @@ public class TowerPlacer : MonoBehaviour
 {
     public GameObject SelectedTower => _selectedTower;
 
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private Transform _towerContainer;
-
     [SerializeField] private GameObject _towerI;
 
     public event Action OnTowerPlaced = () => { };
@@ -38,10 +38,12 @@ public class TowerPlacer : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             TryPlaceTower();
+            _gameManager.UIManager.TowerPlacementControls.SetActive(false);
         }
         else if (Input.GetMouseButtonDown(1))
         {
             CancelTowerPlacement();
+            _gameManager.UIManager.TowerPlacementControls.SetActive(false);
         }
     }
 
@@ -78,5 +80,7 @@ public class TowerPlacer : MonoBehaviour
 
         _selectedTower = Instantiate(towerObj, _mouseHit.point, towerObj.transform.rotation, _towerContainer);
         _selectedTower.GetComponent<Tower>().IsBeingPlaced = true;
+        
+        _gameManager.UIManager.TowerPlacementControls.SetActive(true);
     }
 }
