@@ -7,7 +7,7 @@ public class DamageableUnit : MonoBehaviour
 {
     public bool IsDead { get; private set; }
     public float CurHealthPoints => _curHealthPoints;
-    public float MaxHealthPoints => _maxHealthPoints.Value;
+    public Stat MaxHealthPoints => _maxHealthPoints;
 
     [SerializeField] private Stat _maxHealthPoints;
     
@@ -15,14 +15,10 @@ public class DamageableUnit : MonoBehaviour
 
     public event Action OnDie = () => {};
 
-    private void Start()
-    {
-        _curHealthPoints = _maxHealthPoints.Value;
-    }
-
     private void OnEnable()
     {
         IsDead = false;
+        _curHealthPoints = _maxHealthPoints.Value;
     }
 
     public void Damage(float damage)

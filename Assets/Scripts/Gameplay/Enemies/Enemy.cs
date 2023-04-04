@@ -19,25 +19,37 @@ public abstract class Enemy : MonoBehaviour
         set
         {
             _goal = value;
-            _agent.destination = _goal.position;
+        }
+    }
+
+    protected void OnEnable()
+    {
+        if (Goal)
+        {
+            _agent.destination = Goal.position;
         }
     }
 
     public event Action OnGoalReach = () => { };
 
     [Header("Stats")]
-    [SerializeField] private int _goldValue;
-    [SerializeField] private int _scoreValue;
-    [SerializeField] private Stat _baseSpeed;
+    [SerializeField] protected DamageableUnit _damageableComponent;
+    [SerializeField] protected float _healthPointsGrowth;
+    [SerializeField] protected int _goldValue;
+    [SerializeField] protected int _scoreValue;
+    [SerializeField] protected Stat _baseSpeed;
 
     protected NavMeshAgent _agent;
-    protected Transform _goal;
+    [SerializeField] protected Transform _goal;
     protected Transform _transform;
 
     protected void Awake()
     {
         _transform = transform;
         _agent = GetComponent<NavMeshAgent>();
+        _baseSpeed.OnAddModifier += SetEnemySpeed;
+        _baseSpeed.OnRemoveModifier += SetEnemySpeed;
+        SetEnemySpeed();
     }
 
     protected void Update()
@@ -45,8 +57,19 @@ public abstract class Enemy : MonoBehaviour
         _transform.LookAt(Goal.position);
     }
 
+    protected void SetEnemySpeed()
+    {
+        _agent.speed = _baseSpeed.Value;
+    }
+
     public void CallOnGoalReach()
     {
         OnGoalReach();
+    }
+
+    public void IncreaseStats(int level)
+    {
+        _damageableComponent.MaxHealthPoints.RemoveAllModifiers();
+        _damageableComponent.MaxHealthPoints.AddModifier(new StatModifier(StatModifierType.AbsolutValue, level * _healthPointsGrowth));
     }
 }

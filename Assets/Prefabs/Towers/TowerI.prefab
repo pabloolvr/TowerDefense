@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8386516035432880592}
   - component: {fileID: 8386516035432880595}
   - component: {fileID: 8386516035432880594}
-  - component: {fileID: 8386516035432880593}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -28,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 8386516035432880607}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 10.9, z: 0}
-  m_LocalScale: {x: 1.6507, y: 1.6507, z: 1.6507}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 8386516037265600156}
   m_RootOrder: 0
@@ -60,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7a0379cb0e8ec1c478dc1c9f0300553a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -82,19 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8386516035432880593
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8386516035432880607}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8386516035878098766
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,6 +426,7 @@ GameObject:
   - component: {fileID: 8386516037265600156}
   - component: {fileID: 8386516037265600157}
   - component: {fileID: 3497145469832375254}
+  - component: {fileID: 3744661034454442344}
   m_Layer: 0
   m_Name: TowerI
   m_TagString: Untagged
@@ -479,9 +466,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyDetector: {fileID: 8386516037249116328}
   _towerBase: {fileID: 8386516035878098767}
-  _towerActionRange: {fileID: 8386516037249116342}
+  _name: Tower I
+  _description: Deals high single-target damage at each hit.
+  _basePrice: 100
+  _baseUpgradeCost: 60
+  _maxLevel: 0
+  _upgradeCostGrowth: 1.5
+  _isMultiTarget: 0
   _attacksPerSecond: 1
-  _attackDamage: 40
+  _attackDamage: 50
+  _attackDamageGrowth: 1
 --- !u!114 &3497145469832375254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -496,3 +490,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _greenMaterial: {fileID: 2100000, guid: b53402d9c6f9bc441a2f7a3244f4443e, type: 2}
   _redMaterial: {fileID: 2100000, guid: 01a26ad161e5a4648a60c2e0f28bb865, type: 2}
+--- !u!114 &3744661034454442344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8386516037265600155}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68296c1d8c13ec944ba8f26865073ce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _outlineTransforms:
+  - {fileID: 8386516035432880592}
+  - {fileID: 8386516037145680721}
+  - {fileID: 8386516035878098767}
+  _outlineMode: 0
+  _outlineColor: {r: 1, g: 1, b: 0, a: 0}
+  _outlineWidth: 8

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,13 +9,18 @@ public class TowerPlacer : MonoBehaviour
 
     [SerializeField] private GameObject _towerI;
 
+    public event Action OnTowerPlaced = () => { };
+    public event Action OnTowerCanceled = () => { };
+
     private GameObject _selectedTower;
     private Camera _camera;
-    private int _layerMask;
+    private int _groundLayerMask;
+    private RaycastHit _mouseHit;
+    private Ray _mouseRay;
 
-    void Start()
+    private void Start()
     {
-        _layerMask = 1 << 7;
+        _groundLayerMask = 1 << 7;
         _selectedTower = null;
         _camera = Camera.main;
     }
@@ -23,11 +29,9 @@ public class TowerPlacer : MonoBehaviour
     {
         if (_selectedTower == null) return;
 
-        RaycastHit hit;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-
-        Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity, _layerMask);
-        _selectedTower.transform.position = hit.point;
+        _mouseRay = _camera.ScreenPointToRay(Input.mousePosition);
+        Physics.Raycast(_mouseRay.origin, _mouseRay.direction, out _mouseHit, Mathf.Infinity, _groundLayerMask);
+        _selectedTower.transform.position = _mouseHit.point;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -47,22 +51,30 @@ public class TowerPlacer : MonoBehaviour
         {
             _selectedTower.GetComponent<Tower>().IsBeingPlaced = false;
             _selectedTower = null;
+            OnTowerPlaced();
         }
+    }
+
+    public void RemoveListeners()
+    {
+        OnTowerPlaced = null;
+        OnTowerCanceled = null;
     }
 
     public void CancelTowerPlacement()
     {
         Destroy(_selectedTower);
         _selectedTower = null;
+        OnTowerCanceled();
     }
 
-    public void SelectTower()
+    public void SelectTower(GameObject towerObj)
     {
-        RaycastHit hit;
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity, _layerMask);
+        RaycastHit _mouseHit;
+        Ray _mouseRay = _camera.ScreenPointToRay(Input.mousePosition);
+        Physics.Raycast(_mouseRay.origin, _mouseRay.direction, out _mouseHit, Mathf.Infinity, _groundLayerMask);
 
-        _selectedTower = Instantiate(_towerI, hit.point, _towerI.transform.rotation, _towerContainer);
+        _selectedTower = Instantiate(towerObj, _mouseHit.point, towerObj.transform.rotation, _towerContainer);
         _selectedTower.GetComponent<Tower>().IsBeingPlaced = true;
     }
 }

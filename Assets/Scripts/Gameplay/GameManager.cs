@@ -4,26 +4,22 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
-
+    public UIManager UIManager => _UIManager;
+    public TowerPlacer TowerPlacer => _towerPlacer;
+    public PlayerManager PlayerManager => _playerManager;
+    public WaveManager WaveManager => _waveManager;
 
     [Header("References")]
     [SerializeField] private UIManager _UIManager;
+    [SerializeField] private TowerPlacer _towerPlacer;
     [SerializeField] private PlayerManager _playerManager;
-    [SerializeField] private Transform _enemiesContainer;
-
-    private Enemy[] _enemies;
-
-    private void Awake()
-    {
-        _enemies = _enemiesContainer.GetComponentsInChildren<Enemy>();
-    }
+    [SerializeField] private WaveManager _waveManager;
 
     private void Start()
     {
         StartUI();
 
-        foreach (Enemy enemy in _enemies)
+        foreach (Enemy enemy in _waveManager.EnemyPool)
         {
             enemy.GetComponent<DamageableUnit>().OnDie += () => 
             { 
@@ -37,9 +33,15 @@ public class GameManager : MonoBehaviour
             {
                 _playerManager.AddHealthPoints(-1);
                 _UIManager.UpdateHealthAmount(_playerManager.PlayerHealthPoints);
+
+                if (_playerManager.PlayerHealthPoints == 0)
+                {
+                    EndGame();
+                }
             };
 
             enemy.Goal = _playerManager.Base;
+            enemy.gameObject.SetActive(false);
         }
     }
 
@@ -48,5 +50,15 @@ public class GameManager : MonoBehaviour
         _UIManager.UpdateHealthAmount(_playerManager.PlayerHealthPoints);
         _UIManager.UpdateGoldAmount(_playerManager.PlayerGold);
         _UIManager.UpdateScore(_playerManager.PlayerScore);
+    }
+
+    public void EndGame()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void StartGame()
+    {
+        Time.timeScale = 1;
     }
 }

@@ -22,12 +22,11 @@ public class HealthBar : MonoBehaviour
 
     void Update()
     {
-
-        if (_damageable.CurHealthPoints < _damageable.MaxHealthPoints)
+        if (_damageable.CurHealthPoints < _damageable.MaxHealthPoints.Value)
         {
             _canvas.enabled = true;
-            _healthBar.fillAmount = _damageable.CurHealthPoints / _damageable.MaxHealthPoints;
-            _healthBarTransform.LookAt(_cameraPos);
+            _healthBar.fillAmount = _damageable.CurHealthPoints / _damageable.MaxHealthPoints.Value;
+            _healthBarTransform.LookAt(_cameraPos, _healthBarTransform.up);
         }
         else
         {

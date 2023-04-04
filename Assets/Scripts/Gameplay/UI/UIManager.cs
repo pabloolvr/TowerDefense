@@ -2,44 +2,118 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public GameManager GameManager => _gameManager;
+    public ScrollRect TowerCardsScrollRect => _towerCardsScrollRect;
+    public Button TowersButton => _towersButton;
+    public TowerInfoPanel TowerInfoPanel => _towerInfoPanel;
+
+    [SerializeField] private GameManager _gameManager;
     [SerializeField] private TextMeshProUGUI _playerHealthField;
     [SerializeField] private TextMeshProUGUI _playerGoldField;
     [SerializeField] private TextMeshProUGUI _playerScoreField;
+    [SerializeField] private TowerInfoPanel _towerInfoPanel;
+    [SerializeField] private ScrollRect _towerCardsScrollRect;
+    [SerializeField] private Button _towersButton;
 
+    private UITowerCard[] _towerCards;
     private Camera _camera;
-    private int _layerMask;
+    private int _towerLayerMask;
+    private Ray _mouseRay;
+    private RaycastHit _mouseHit;
+    private SelectableObject _curSelectableObject;
 
-    // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         _camera = Camera.main;
-        _layerMask = 1 << 6;
+        _towerLayerMask = 1 << 6;
+        _curSelectableObject = null;
+
+        _towerInfoPanel.OnUpgrade += () => 
+        {
+            _gameManager.PlayerManager.AddGoldAmount(-_towerInfoPanel.CurTower.UpgradeCost);
+            UpdateGoldAmount(_gameManager.PlayerManager.PlayerGold);
+            _towerInfoPanel.UpdateUpgradeButton(_gameManager.PlayerManager.PlayerGold);
+        };
+    }
+
+    private void Start()
+    {
+        StartTowerCards();
     }
 
     private void Update()
     {
-        /*
-        if (Input.GetMouseButtonDown(0))
+        _mouseRay = _camera.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(_mouseRay.origin, _mouseRay.direction, out _mouseHit, Mathf.Infinity, _towerLayerMask))
         {
-            RaycastHit hit;
-            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-            //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.yellow, 999);
-            
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity, _layerMask))
+            Debug.DrawRay(_mouseRay.origin, _mouseRay.direction * 1000, Color.yellow);
+            if (_mouseHit.transform.parent.TryGetComponent(out SelectableObject selectableObject))
             {
-                //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.yellow);
-                Debug.Log($"Hit {hit.transform.name}");
+                if (_curSelectableObject == null)
+                {
+                    _curSelectableObject = selectableObject;
+                    _curSelectableObject.SetOutlineActive(true);
+                }
+                else if (_curSelectableObject != selectableObject)
+                {
+                    _curSelectableObject.SetOutlineActive(false);
+                    _curSelectableObject.GetComponent<Tower>().ShowTowerRange(false);
+                    _curSelectableObject = selectableObject;
+                    _curSelectableObject.SetOutlineActive(true);
+                }    
+                
+                if (_curSelectableObject.IsSelected)
+                {
+                    Tower towerComponent = _curSelectableObject.GetComponent<Tower>();
+
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        SetTowerInfoPanel(towerComponent);
+                        _towerInfoPanel.UpdateUpgradeButton(_gameManager.PlayerManager.PlayerGold);
+                    }
+
+                    towerComponent.ShowTowerRange(true);
+                }
             }
         }
-        */
+        else if (_curSelectableObject != null)
+        {
+            _curSelectableObject.SetOutlineActive(false);
+            _curSelectableObject.GetComponent<Tower>().ShowTowerRange(false);
+            _curSelectableObject = null;
+        }
+    }
+
+    private void SetTowerInfoPanel(Tower tower)
+    {
+        _towerInfoPanel.CurTower = tower;
+    }
+
+    private void StartTowerCards()
+    {
+        _towerCards = _towerCardsScrollRect.content.GetComponentsInChildren<UITowerCard>(true);
+
+        foreach (var towerCard in _towerCards)
+        {
+            towerCard.Initialize(_gameManager.TowerPlacer, this);
+        }
     }
 
     public void UpdateGoldAmount(int amount)
     {
         _playerGoldField.text = "Gold: " + amount.ToString();
+
+        _towerInfoPanel.UpdateUpgradeButton(amount);
+
+        foreach (var towerCard in _towerCards)
+        {
+            towerCard.SetPlaceButtonInteractivity(amount);
+        }
     }
 
     public void UpdateHealthAmount(int amount)
