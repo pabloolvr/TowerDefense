@@ -136,8 +136,8 @@ MonoBehaviour:
   _description: Deals low damage over time to all enemies in range.
   _maxLevel: 0
   _basePrice: 100
-  _priceGrowth: 100
-  _baseUpgradeCost: 60
+  _priceGrowth: 50
+  _baseUpgradeCost: 50
   _upgradeCostGrowth: 1.5
   _damagePerSecond: 10
   _damagePerSecondGrowth: 0.1
@@ -172,7 +172,6 @@ MonoBehaviour:
   - {fileID: 7295862247785697169}
   - {fileID: 7295862249204073359}
   _outlineMode: 0
-  _outlineColor: {r: 1, g: 1, b: 0, a: 0}
   _outlineWidth: 8
 --- !u!1 &7295862247785697168
 GameObject:

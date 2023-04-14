@@ -470,8 +470,8 @@ MonoBehaviour:
   _description: Deals high single-target damage at each hit.
   _maxLevel: 0
   _basePrice: 100
-  _priceGrowth: 100
-  _baseUpgradeCost: 60
+  _priceGrowth: 50
+  _baseUpgradeCost: 50
   _upgradeCostGrowth: 1.5
   _attacksPerSecond: 1
   _attackDamage: 50
@@ -507,5 +507,4 @@ MonoBehaviour:
   - {fileID: 8386516037145680721}
   - {fileID: 8386516035878098767}
   _outlineMode: 0
-  _outlineColor: {r: 1, g: 1, b: 0, a: 0}
   _outlineWidth: 8

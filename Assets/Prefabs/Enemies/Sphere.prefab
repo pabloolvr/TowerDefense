@@ -386,11 +386,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageableComponent: {fileID: 8283947282111716152}
-  _healthPointsGrowth: 0.5
-  _goldValue: 10
+  _healthPointsGrowth: 0.25
+  _goldValue: 20
   _scoreValue: 1
   _baseSpeed:
-    _baseValue: 10
+    _baseValue: 8
     _modifiers: []
 --- !u!1 &8283947282144712025
 GameObject:
