@@ -143,6 +143,7 @@ public abstract class Tower : MonoBehaviour
             _enemyDetector.UpdateDetectedEnemies(deadEnemies);
         }
     }
+
     private void ActivateSelectableComponent()
     {
         _selectableComponent.enabled = true;

@@ -61,7 +61,6 @@ public class UITowerCard : MonoBehaviour
 
     private void BuyNewTower()
     {
-
         _uiManager.GameManager.PlayerManager.AddGoldAmount(-TotalTowerPrice);
         _uiManager.UpdateGoldAmount(_uiManager.GameManager.PlayerManager.PlayerGold);        
         PlacedTowersQty++;
